@@ -44,12 +44,15 @@
     "estraverse": "^5.3.0",
     "http-cookie-agent": "^4.0.2",
     "jsdom": "^20.0.2",
+    "json-stable-stringify": "^1.0.1",
     "lodash-es": "^4.17.21",
+    "protobufjs": "^7.1.2",
     "tough-cookie": "^4.1.2"
   },
   "devDependencies": {
     "@types/eslint": "8.4.9",
     "@types/js-yaml": "^4.0.5",
+    "@types/json-stable-stringify": "^1.0.34",
     "@types/lodash-es": "^4.17.6",
     "@types/node": "^18.11.9",
     "@types/sort-json": "^2.0.1",

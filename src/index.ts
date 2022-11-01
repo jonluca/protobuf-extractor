@@ -1,53 +1,12 @@
-import esprima from "esprima";
-import estraverse from "estraverse";
 import jsdom from "jsdom";
 import * as path from "path";
-import { isString } from "lodash";
 import { axiosClient } from "./axiosClient.js";
+import { fetchAndParseJsFile } from "./file-handling.js";
+
 const { JSDOM } = jsdom;
 
 const BASE_URL = process.argv[process.argv.length - 2];
 const OUT_DIR = process.argv[process.argv.length - 1];
-
-export const parseJsFile = async (contents: string) => {
-  const ast = esprima.parseScript(contents);
-
-  const strings = new Set<string>();
-
-  estraverse.traverse(ast, {
-    enter: (node, parent) => {
-      if (node.type === "Literal") {
-        if (isString(node.value)) {
-          strings.add(node.value);
-        }
-      }
-    },
-  });
-
-  const unique = Array.from(strings);
-  const validJson = [];
-  for (const str of unique) {
-    if (str) {
-      const trimmed = str.trim();
-      if (trimmed.startsWith("{") && trimmed.endsWith("}")) {
-        try {
-          const parsed = JSON.parse(trimmed);
-          if (Object.keys(parsed).length) {
-            validJson.push(parsed);
-          }
-        } catch {
-          // do nothing
-        }
-      }
-    }
-  }
-  return validJson;
-};
-
-const fetchAndParseJsFile = async (url: string) => {
-  const { data } = await axiosClient.get(url);
-  await parseJsFile(data);
-};
 
 const run = async () => {
   if (!BASE_URL || !OUT_DIR) {
