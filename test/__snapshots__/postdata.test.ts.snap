@@ -1,0 +1,188 @@
+// Vitest Snapshot v1
+
+exports[`har-to-openapi: Post data > HAR with request with postdata matches snapshot 1`] = `
+{
+  "domain": "test.loadimpact.com",
+  "spec": {
+    "info": {
+      "description": "OpenAPI spec generated from HAR data for test.loadimpact.com on 2022-01-01T00:00:00.000Z",
+      "title": "HarToOpenApi",
+      "version": "1.0.0",
+    },
+    "openapi": "3.0.0",
+    "paths": {
+      "/login": {
+        "parameters": [],
+        "post": {
+          "description": "",
+          "operationId": "postLogin",
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "password": "123",
+                  "user": "admin",
+                },
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "password": {
+                      "format": "integer",
+                      "type": "string",
+                    },
+                    "user": {
+                      "type": "string",
+                    },
+                  },
+                  "required": [],
+                  "title": "LoginPostRequest",
+                  "type": "object",
+                },
+              },
+            },
+            "required": true,
+          },
+          "responses": {},
+          "summary": "Post Login",
+        },
+      },
+    },
+    "servers": [
+      {
+        "url": "http://test.loadimpact.com",
+      },
+    ],
+  },
+  "yamlSpec": "openapi: 3.0.0
+info:
+  title: HarToOpenApi
+  version: 1.0.0
+  description: >-
+    OpenAPI spec generated from HAR data for test.loadimpact.com on
+    2022-01-01T00:00:00.000Z
+paths:
+  /login:
+    parameters: []
+    post:
+      description: ''
+      operationId: postLogin
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            example:
+              password: '123'
+              user: admin
+            schema:
+              additionalProperties: false
+              properties:
+                password:
+                  format: integer
+                  type: string
+                user:
+                  type: string
+              required: []
+              title: LoginPostRequest
+              type: object
+        required: true
+      responses: {}
+      summary: Post Login
+servers:
+  - url: /
+",
+}
+`;
+
+exports[`har-to-openapi: Post data > HAR with request with postdata with a mismatch matches snapshot 1`] = `
+{
+  "domain": "test.loadimpact.com",
+  "spec": {
+    "info": {
+      "description": "OpenAPI spec generated from HAR data for test.loadimpact.com on 2022-01-01T00:00:00.000Z",
+      "title": "HarToOpenApi",
+      "version": "1.0.0",
+    },
+    "openapi": "3.0.0",
+    "paths": {
+      "/login": {
+        "parameters": [],
+        "post": {
+          "description": "",
+          "operationId": "postLogin",
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "properties": {
+                    "foo0": {
+                      "type": "string",
+                    },
+                    "foo1": {
+                      "type": "string",
+                    },
+                    "foo3": {
+                      "type": "string",
+                    },
+                  },
+                  "required": [
+                    "foo0",
+                    "foo3",
+                    "foo1",
+                  ],
+                  "type": "object",
+                },
+              },
+            },
+            "required": true,
+          },
+          "responses": {},
+          "summary": "Post Login",
+        },
+      },
+    },
+    "servers": [
+      {
+        "url": "http://test.loadimpact.com",
+      },
+    ],
+  },
+  "yamlSpec": "openapi: 3.0.0
+info:
+  title: HarToOpenApi
+  version: 1.0.0
+  description: >-
+    OpenAPI spec generated from HAR data for test.loadimpact.com on
+    2022-01-01T00:00:00.000Z
+paths:
+  /login:
+    parameters: []
+    post:
+      description: ''
+      operationId: postLogin
+      parameters: []
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                foo0:
+                  type: string
+                foo1:
+                  type: string
+                foo3:
+                  type: string
+              required:
+                - foo0
+                - foo3
+                - foo1
+              type: object
+        required: true
+      responses: {}
+      summary: Post Login
+servers:
+  - url: /
+",
+}
+`;
