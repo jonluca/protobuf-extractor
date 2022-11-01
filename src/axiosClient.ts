@@ -2,15 +2,12 @@ import { HttpCookieAgent, HttpsCookieAgent } from "http-cookie-agent/http";
 import { CookieJar } from "tough-cookie";
 import type { AxiosRequestConfig } from "axios";
 import axios from "axios";
-
-import "axios";
-
 declare module "axios" {
   interface AxiosRequestConfig {
     jar?: CookieJar;
   }
 }
-export const jar = new CookieJar(undefined, {
+const jar = new CookieJar(undefined, {
   allowSpecialUseDomain: true,
   looseMode: true,
   rejectPublicSuffixes: false,

@@ -5,7 +5,7 @@ export default defineConfig({
     environment: "node",
     dir: "test",
     watch: false,
-    testTimeout: 5000,
+    testTimeout: 50_000,
     passWithNoTests: true,
     reporters: ["verbose"],
     coverage: { reporter: ["lcov", "html", "text"] },
