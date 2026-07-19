@@ -1,12 +1,10 @@
 import { axiosClient } from "./axiosClient.js";
 import esprima from "esprima";
 import estraverse from "estraverse";
-import { isString } from "lodash";
-import { uniqBy } from "lodash-es";
+import { isString, uniqBy } from "lodash-es";
 import stableStringify from "json-stable-stringify";
 import type { Root } from "protobufjs";
 import protobuf from "protobufjs";
-import path from "path";
 import { parse } from "node-html-parser";
 
 export const parseJsFile = async (contents: string): Promise<Root[]> => {
@@ -32,7 +30,13 @@ export const parseJsFile = async (contents: string): Promise<Root[]> => {
       if (trimmed.startsWith("{") && trimmed.endsWith("}")) {
         try {
           const parsed = JSON.parse(trimmed);
-          if (Object.keys(parsed).length) {
+          if (
+            parsed &&
+            typeof parsed === "object" &&
+            parsed.nested &&
+            typeof parsed.nested === "object" &&
+            Object.keys(parsed.nested).length
+          ) {
             validJson.push(parsed);
           }
         } catch {
@@ -48,7 +52,7 @@ export const parseJsFile = async (contents: string): Promise<Root[]> => {
   return roots;
 };
 
-export const parseHtmlAndFetchScripts = async (html: string, url: string, protocol: string) => {
+export const parseHtmlAndFetchScripts = async (html: string, url: string, _protocol?: string) => {
   const root = parse(html);
   const scripts = root.getElementsByTagName("script");
 
@@ -56,8 +60,7 @@ export const parseHtmlAndFetchScripts = async (html: string, url: string, protoc
   scripts.forEach((l) => {
     const src = l.attrs.src;
     if (src) {
-      const fullurl = `${src.startsWith("//") ? protocol || "https:" : ""}${src}`;
-      srcList.push(fullurl);
+      srcList.push(new URL(src, url).toString());
     }
   });
 
@@ -69,11 +72,6 @@ export const parseHtmlAndFetchScripts = async (html: string, url: string, protoc
 
   const processUrl = async (src: string) => {
     try {
-      if (!(src.startsWith("http:") || src.startsWith("https:"))) {
-        const parsedUrl = new URL(url);
-        parsedUrl.pathname = src?.startsWith("/") ? src : path.join(parsedUrl.pathname, src);
-        src = parsedUrl.toString();
-      }
       const { data } = await axiosClient.get(src);
       roots.push(await parseJsFile(data));
     } catch {
@@ -86,6 +84,6 @@ export const parseHtmlAndFetchScripts = async (html: string, url: string, protoc
   return allRoots;
 };
 export const fetchAndParseJsFilesFromWebpage = async (url: string) => {
-  const { data, request } = await axiosClient.get(url);
-  return parseHtmlAndFetchScripts(data, url, request.protocl);
+  const { data } = await axiosClient.get(url);
+  return parseHtmlAndFetchScripts(data, url);
 };
