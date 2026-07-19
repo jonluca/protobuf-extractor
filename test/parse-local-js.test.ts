@@ -17,8 +17,17 @@ describe("Parsing js", async () => {
   });
 
   test(`Parses JS from website`, async ({ expect }) => {
+    const get = vi
+      .spyOn(axiosClient, "get")
+      .mockResolvedValueOnce({ data: '<script src="/explore.js"></script>' })
+      .mockResolvedValueOnce({ data: explore });
+
     const data = await fetchAndParseJsFilesFromWebpage("https://www.exploretock.com/");
+
     expect(data).toHaveLength(3);
+    expect(get).toHaveBeenCalledWith("https://www.exploretock.com/");
+    expect(get).toHaveBeenCalledWith("https://www.exploretock.com/explore.js");
+    get.mockRestore();
   });
   test(`Parses JS with no protobufs`, async ({ expect }) => {
     const data = await parseJsFile(chunk);
